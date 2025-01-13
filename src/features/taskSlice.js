@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   tasks: [],
@@ -20,9 +20,7 @@ const taskSlice = createSlice({
       if (index !== -1) state.tasks[index] = action.payload;
     },
     deleteTask: (state, action) => {
-      const index = state.tasks.findIndex(
-        (task) => task.id === action.payload
-      );
+      const index = state.tasks.findIndex((task) => task.id === action.payload);
       state.tasks.splice(index, 1);
     },
     setStatusFilter: (state, action) => {
@@ -35,22 +33,28 @@ const taskSlice = createSlice({
 });
 
 export const selectTasks = (state) => state.tasks?.tasks;
-export const selectFilteredTasks = (state) => {
-  const { tasks, statusFilter, searchQuery } = state.tasks;
-
-  const filteredByStatus =
-    statusFilter === "All"
-      ? tasks
-      : tasks.filter((task) => task.status === statusFilter);
-
-  const filteredBySearch = filteredByStatus.filter((task) =>
-    task.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  return filteredBySearch;
-};
 export const selectStatusFilter = (state) => state.tasks.statusFilter;
 export const selectSearchQuery = (state) => state.tasks.searchQuery;
+
+export const selectFilteredTasks = createSelector(
+  [selectTasks, selectStatusFilter, selectSearchQuery],
+  (tasks, statusFilter, searchQuery) => {
+    let filteredTasks = tasks;
+    if (statusFilter !== "All") {
+      filteredTasks = filteredTasks.filter(
+        (task) => task.status === statusFilter
+      );
+    }
+
+    if (searchQuery) {
+      filteredTasks = filteredTasks.filter((task) =>
+        task.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    return filteredTasks;
+  }
+);
 
 export const {
   addTask,
