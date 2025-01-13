@@ -1,24 +1,22 @@
+import FullCalendar from "@fullcalendar/react";
 import React from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import { useSelector } from "react-redux";
+import dayGridPlugin from "@fullcalendar/daygrid";
 
 const TaskCalendar = () => {
   const tasks = useSelector((state) => state.tasks.tasks);
 
-  const getTileContent = ({ date }) => {
-    const task = tasks.find(
-      (task) => new Date(task.deadline).toDateString() === date.toDateString()
-    );
-    return task ? (
-      <span className="text-xs text-red-500">{task.title}</span>
-    ) : null;
-  };
-
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Clendar View</h2>
-      <Calendar tileContent={getTileContent} />
+      <h2 className="text-2xl font-bold mb-4 text-stone-50">Clendar View</h2>
+      <div className="bg-slate-100 p-5">
+        <FullCalendar
+          initialView="dayGridMonth"
+          themeSystem="Simplex"
+          plugins={[dayGridPlugin]}
+          events={tasks}
+        />
+      </div>
     </div>
   );
 };

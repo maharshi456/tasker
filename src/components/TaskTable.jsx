@@ -109,8 +109,14 @@ const TaskTable = () => {
                   {task.title}
                 </th>
                 <td className="px-6 py-4">{task.description}</td>
-                <td className="px-6 py-4">{task.deadline}</td>
-                <td className="px-6 py-4">{task.status}</td>
+                <td className="px-6 py-4">{task.date}</td>
+                <td className="px-6 py-4">
+                  <div
+                    className={`rounded-full bg-[${task.color}] py-0.5 px-2.5 border border-transparent text-sm text-white transition-all shadow-sm`}
+                  >
+                    {task.status}
+                  </div>
+                </td>
                 <td className="px-6 py-4">
                   <button onClick={() => togglePopup(task)}>
                     <svg

@@ -10,14 +10,33 @@ const Dialog = ({ taskList, taskData, togglePopup }) => {
       : {
           title: "",
           description: "",
-          deadline: "",
+          date: "",
           status: "Pending",
+          color: "#cc7700",
         }
   );
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setTask({ ...task, [name]: value });
+    let StatusColor = "#cc7700";
+
+    if (name == "status") {
+      switch (value) {
+        case "pending":
+          StatusColor = "#cc7700";
+          break;
+        case "In Progress":
+          StatusColor = "#0066b2";
+          break;
+        case "Completed":
+          StatusColor = "#018749";
+          break;
+
+        default:
+          break;
+      }
+    }
+    setTask({ ...task, color: StatusColor, [name]: value });
   };
 
   const handleSubmit = (e) => {
@@ -79,8 +98,8 @@ const Dialog = ({ taskList, taskData, togglePopup }) => {
             </label>
             <input
               type="date"
-              name="deadline"
-              value={task?.deadline}
+              name="date"
+              value={task?.date}
               onChange={handleChange}
               required
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
